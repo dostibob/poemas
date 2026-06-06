@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Jardín de Poemas - Para ti 💌</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #fdf8f0 0%, #f7eae0 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 1.5rem 1rem;
+            color: #2c2418;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .dedicatoria {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+            font-size: 0.95rem;
+            color: #945325;
+            font-style: italic;
+            border: 1px solid rgba(226, 196, 156, 0.4);
+            padding: 1rem 1.5rem;
+            background: #fffbf5;
+            border-radius: 50px;
+            line-height: 1.5;
+            box-shadow: 0 4px 15px rgba(180, 95, 43, 0.04);
+        }
+
+        /* DISEÑO DE MOSAICO (Masonry) PARA PANTALLAS MEDIANAS Y GRANDES */
+        .poemas-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            columns: 1; /* Por defecto en móviles una sola columna */
+            column-gap: 1.5rem;
+        }
+
+        .poema-card {
+            background: #fffefb;
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 25px rgba(44, 36, 24, 0.05), 0 2px 5px rgba(0, 0, 0, 0.02);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+            border: 1px solid rgba(226, 196, 156, 0.35);
+            display: inline-block; /* Evita que la tarjeta se parta entre columnas */
+            width: 100%;
+            margin-bottom: 1.5rem; /* Separación vertical en modo mosaico */
+            backface-visibility: hidden;
+        }
+
+        @media (hover: hover) {
+            .poema-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 15px 30px rgba(180, 95, 43, 0.08);
+                border-color: rgba(180, 95, 43, 0.3);
+            }
+        }
+
+        .poema-card:active {
+            transform: scale(0.98);
+        }
+
+        .poema-header {
+            padding: 1.2rem 1.4rem 0.6rem 1.4rem;
+            border-bottom: 1.5px dashed rgba(226, 196, 156, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .poema-titulo {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #9e4f1d;
+            margin: 0;
+            font-family: 'Merriweather', 'Georgia', serif;
+            line-height: 1.3;
+            word-wrap: break-word;
+        }
+
+        .poema-fecha {
+            font-size: 0.75rem;
+            color: #b87c4f;
+            background: #fff1e4;
+            padding: 0.25rem 0.75rem;
+            border-radius: 30px;
+            font-family: system-ui, sans-serif;
+            font-weight: 500;
+            display: inline-block;
+            align-self: flex-start;
+        }
+
+        .poema-contenido {
+            padding: 1.2rem 1.4rem;
+            font-size: 1rem;
+            line-height: 1.75;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Georgia', serif; /* Tipografía más romántica para el cuerpo */
+            color: #3d3224;
+        }
+
+        .poema-footer {
+            padding: 0.7rem 1.4rem 0.9rem 1.4rem;
+            font-size: 0.7rem;
+            color: #b5855c;
+            border-top: 1px solid #f9f1e7;
+            text-align: right;
+            font-style: italic;
+            background: #fffcf8;
+            border-bottom-left-radius: 1.25rem;
+            border-bottom-right-radius: 1.25rem;
+        }
+
+        /* ANIMACIÓN SUAVE AL CARGAR */
+        @keyframes fadeSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .poema-card {
+            animation: fadeSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        /* SCROLLBAR PERSONALIZADO */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdf8f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d9bd9c;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c29f76;
+        }
+
+        /* RESPONSIVIDAD DINÁMICA POR COLUMNAS */
+        @media (min-width: 650px) {
+            .poemas-container {
+                columns: 2;
+            }
+            body {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (min-width: 980px) {
+            .poemas-container {
+                columns: 3;
+            }
+            .dedicatoria {
+                font-size: 1.05rem;
+                margin-bottom: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dedicatoria">
+    ✨ Para la dueña de mis versos — cada poema crece con lo que siento por ti ✨
+</div>
+
+<div class="poemas-container" id="galeriaPoemas"></div>
+
+<script>
+    const poemas = [
+        {
+            titulo: "5 Meses a tu lado",
+            contenido: `Amo tu mente, tu calma y tu brillo;
+Contigo todo parece sencillo.
+Cada latido tuyo es un poema
+que deshoja el silencio de la madrugada.
+
+Te dedico este verso que respira tu nombre,
+hecho de pétalos y coraje,
+y sé que breve o extenso, igual de eterno.`,
+            fecha: "07 de mayo, 2026"
+        },
+        {
+            titulo: "Instante breve",
+            contenido: `Tus dedos rozaron mi sombra.
+Y bastó.`,
+            fecha: "3 feb 2024"
+        },
+        {
+            titulo: "Maremoto callado",
+            contenido: `Si tuviera que escribir todo lo que siento,
+no alcanzarían ni los mares de tinta.
+Porque tú eres el poema infinito,
+el que no termina nunca.
+
+Llevo tus risas guardadas en los bolsillos del alma.
+Y cuando el mundo pesa, las saco y respiro.
+Te quiero con la urgencia de las olas,
+con la pausa de las dunas.
+
+(Este es largo como el camino que quiero recorrer contigo).`,
+            fecha: "20 de mayo, 2024"
+        },
+        {
+            titulo: "Rincón de té y versos",
+            contenido: `Dos tazas humeantes,
+un libro a medias,
+y tu cadencia al leer.
+Eso basta para ser feliz.`,
+            fecha: "2024"
+        },
+        {
+            titulo: "Lo que nunca dije en voz alta",
+            contenido: `A veces la noche se hace larga,
+pero solo hasta que recuerdo que existes.
+Entonces los astros se ordenan
+y el universo tiene sentido.
+
+Te regalo este manojo de letras,
+algunas temblorosas, otras firmes.
+Pero todas sinceras.
+
+Gracias por quedarte a leer mi silencio.`,
+            fecha: "2 sept 2023"
+        },
+        {
+            titulo: "Breve como un suspiro",
+            contenido: `Tú.
+Siempre tú.`,
+            fecha: "ayer"
+        }
+    ];
+
+    function escaparHTML(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+    
+    function renderizarPoemas() {
+        const contenedor = document.getElementById('galeriaPoemas');
+        if (!contenedor) return;
+        
+        contenedor.innerHTML = '';
+        
+        if (poemas.length === 0) {
+            const mensajeVacio = document.createElement('div');
+            mensajeVacio.className = 'poema-card';
+            mensajeVacio.style.textAlign = 'center';
+            mensajeVacio.style.padding = '2rem';
+            mensajeVacio.innerHTML = `
+                <div class="poema-contenido" style="font-style: italic; color:#b48a64;">
+                    💭 Pronto llenaré estos versos para ti...
+                </div>
+            `;
+            contenedor.appendChild(mensajeVacio);
+            return;
+        }
+        
+        poemas.forEach((poema, index) => {
+            const card = document.createElement('article');
+            card.className = 'poema-card';
+            
+            // Retiramos los espacios extras iniciales/finales del contenido original
+            const contenidoLimpio = poema.contenido ? poema.contenido.trim() : '';
+            
+            const tituloMostrar = poema.titulo && poema.titulo.trim() !== "" ? poema.titulo : "Poema sin título";
+            const fechaMostrar = poema.fecha && poema.fecha.trim() !== "" ? poema.fecha : "sin fecha";
+            const contenidoConSaltos = escaparHTML(contenidoLimpio).replace(/\n/g, '<br>');
+            
+            card.innerHTML = `
+                <div class="poema-header">
+                    <h2 class="poema-titulo">${escaparHTML(tituloMostrar)}</h2>
+                    <span class="poema-fecha">${escaparHTML(fechaMostrar)}</span>
+                </div>
+                <div class="poema-contenido">${contenidoConSaltos || '<em>… un verso que espera ser escrito …</em>'}</div>
+                <div class="poema-footer">
+                    🌹 dedicado con el corazón &nbsp;•&nbsp; ${index + 1}
+                </div>
+            `;
+            contenedor.appendChild(card);
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        renderizarPoemas();
+    });
+</script>
+
+</body>
+</html>
